@@ -53,10 +53,36 @@ class ProductController {
       res.status(500).json({ error: " Internal Server error" });
     }
   }
+  // async deleteProduct(req, res) {
+  //   try {
+  //     const { id } = req.params;
+  //     console.log(id);
+  //     const deletedProduct = await Product.findByidAndDelete(id);
+  //     if (deletedProduct) {
+  //       res.json({ message: "Product deleted successfully" });
+  //     } else {
+  //       res.status(404).json({ error: "Product not found" });
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ error: " Internal Server error" });
+  //   }
+  //   const key = await Product.deleteOne({ title: "watch" })
+  //     .then(function () {
+  //       console.log("Blog deleted"); // Success
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     }); // Failure;
+  //   // key.role = undefined;
+  //   // await key.save();
+  //   console.log(key);
+  // }
   async deleteProduct(req, res) {
     try {
       const { id } = req.params;
-      const deletedProduct = await Product.findByidAndDelete(id);
+      console.log(id);
+      const deletedProduct = await Product.findByIdAndDelete(id);
       if (deletedProduct) {
         res.json({ message: "Product deleted successfully" });
       } else {
@@ -64,7 +90,7 @@ class ProductController {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: " Internal Server error" });
+      res.status(500).json({ error: "Internal Server error" });
     }
   }
 }
