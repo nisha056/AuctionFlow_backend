@@ -1,7 +1,6 @@
 const productModel = require("../models/productModel");
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const secretKey = "mynewproject";
 
 module.exports.viewproduct = async function viewproduct(req, res) {
   try {

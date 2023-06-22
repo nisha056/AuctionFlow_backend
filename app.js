@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const productRouter = require("./routes/productRouter");
+const userRouter = require("./routes/userRouter");
 
 const app = express();
 // Connect to MongoDB Atlas
@@ -21,3 +22,4 @@ mongoose
 app.use(bodyParser.json());
 
 app.use("/products", productRouter);
+app.use("/users", userRouter);
