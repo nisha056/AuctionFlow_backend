@@ -1,97 +1,64 @@
-const Product = require("../models/product");
-class ProductController {
-  async getAllProducts(req, res) {
-    try {
-      const products = await Product.find();
-      res.json(products);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Server Error" });
-    }
-  }
-  async getProductById(req, res) {
-    try {
-      const { id } = req.params;
-      if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Invalid user ID" });
-      }
-      const product = await Product.findById(id);
-      if (product) {
-        res.json(product);
-      } else {
-        res.status(404).json({ error: "Product not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server error" });
-    }
-  }
+const productModel = require("../models/productModel");
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const secretKey = "mynewproject";
 
-  async createProduct(req, res) {
-    try {
-      const product = new Product(req.body);
-      await product.save();
-      res.status(201).json(product);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: " Internal Server error" });
-    }
+module.exports.viewproduct = async function viewproduct(req, res) {
+  try {
+    const product = await productModel.find();
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
   }
-  async updateProduct(req, res) {
-    try {
-      const { id } = req.params;
-      const updatedProduct = await Product.findByIdAndUpdates(id, req.body, {
-        new: true,
+};
+
+module.exports.likeproduct = async function likeproduct(req, res) {
+  try {
+    likeid = req.params.likeid;
+    console.log(likeid);
+    await productModel.findByIdAndUpdate(likeid, { like: true }, { new: true });
+    res.status(200).json({
+      message: "Liked a product",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+module.exports.addproduct = async function addproduct(req, res) {
+  try {
+    let data = req.body;
+    let product = await productModel.create(data);
+    if (product) {
+      return res.status(200).json({
+        message: "Product added successfully",
+        product,
       });
-      if (updatedProduct) {
-        res.json(updatedProduct);
-      } else {
-        res.status(404).json({ error: "User mot found" });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: " Internal Server error" });
+    } else {
+      res.status(400).json({
+        message: "Error on adding",
+      });
     }
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
   }
-  // async deleteProduct(req, res) {
-  //   try {
-  //     const { id } = req.params;
-  //     console.log(id);
-  //     const deletedProduct = await Product.findByidAndDelete(id);
-  //     if (deletedProduct) {
-  //       res.json({ message: "Product deleted successfully" });
-  //     } else {
-  //       res.status(404).json({ error: "Product not found" });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json({ error: " Internal Server error" });
-  //   }
-  //   const key = await Product.deleteOne({ title: "watch" })
-  //     .then(function () {
-  //       console.log("Blog deleted"); // Success
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     }); // Failure;
-  //   // key.role = undefined;
-  //   // await key.save();
-  //   console.log(key);
-  // }
-  async deleteProduct(req, res) {
-    try {
-      const { id } = req.params;
-      console.log(id);
-      const deletedProduct = await Product.findByIdAndDelete(id);
-      if (deletedProduct) {
-        res.json({ message: "Product deleted successfully" });
-      } else {
-        res.status(404).json({ error: "Product not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server error" });
-    }
+};
+
+module.exports.delproduct = async function delproduct(req, res) {
+  try {
+    let id = req.params.id;
+    let item = await productModel.findByIdAndDelete(id);
+    res.status(200).json({
+      message: "selected Product is deleted",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
   }
-}
-module.exports = new ProductController();
+};
