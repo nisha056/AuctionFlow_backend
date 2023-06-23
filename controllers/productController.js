@@ -16,7 +16,6 @@ module.exports.viewproduct = async function viewproduct(req, res) {
 module.exports.likeproduct = async function likeproduct(req, res) {
   try {
     likeid = req.params.likeid;
-    console.log(likeid);
     await productModel.findByIdAndUpdate(likeid, { like: true }, { new: true });
     res.status(200).json({
       message: "Liked a product",

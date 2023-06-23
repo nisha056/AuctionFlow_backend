@@ -2,7 +2,7 @@ const userModel = require("../models/userModel");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const { SECRET = "secret" } = process.env;
+var SECRET = "mynewproject";
 module.exports.viewuser = async function viewuser(req, res) {
   try {
     const user = await userModel.find();
@@ -44,23 +44,15 @@ module.exports.login = async function login(req, res) {
       //check if password matches
       // const result = await bcrypt.compare(req.body.password, user.password);
       if (req.body.password === user.password) {
-        const token = await jwt.sign({ username: user.username }, SECRET, {
+        const token = jwt.sign({ username: user.username }, SECRET, {
           expiresIn: "10d",
-        });
-        res.cookie("jwt", token, {
-          httpOnly: true,
         });
         return res.status(200).json({
           message: "User logged in succesfully",
           jwt: token,
           username: user.username,
         });
-        // const token =
-        // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRpbGxpIiwiaWF0IjoxNjg3NDMzMDcyLCJleHAiOjE2ODc2MDU4NzJ9._FygqECKf5Xo2XuyUMZaFoDxR2Dq5gElMrbWXW4C-wM";
-      }
-
-      // sign token and send it in response
-      else {
+      } else {
         res.status(400).json({ error: "password doesn't match" });
       }
     } else {
@@ -70,29 +62,38 @@ module.exports.login = async function login(req, res) {
     res.status(400).json({ error });
   }
 };
-// module.exports.verifytoken = async function verifytoken(req, res) {
-// try {
-//   let token = req.cookies;
-//   if (token) {
-//     let auth = jwt.verify(token.jwt, process.env.SECRET);
-//     if (auth) {
-//       const user = await userModel.findById(auth.payload);
-//       res.status(200).json({
-//         username: user.username,
-//       });
-//     } else {
-//       res.status(400).json({
-//         message: "Token invalid",
-//       });
-//     }
-//   } else {
-//     res.status(400).json({
-//       message: "No token found",
-//     });
-//   }
-// } catch (err) {
-//   return res.status(500).json({
-//     message: "Failed to authorize",
-//   });
-// }
-// };
+
+//used it as a middleware
+module.exports.verifytoken = async function (req, res, next) {
+  try {
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split(" ")[1];
+      if (token) {
+        jwt.verify(token, SECRET, (err, decode) => {
+          if (err) {
+            res.send({ err });
+            return;
+          }
+          if (decode) {
+            req.user = decode;
+            res
+              .status(200)
+              .json({ message: "token verification sucessfullly!" });
+          }
+        });
+      } else {
+        res.status(400).json({
+          message: "malformed auth header",
+        });
+      }
+    } else {
+      res.status(400).json({
+        message: "No authorization header",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      err,
+    });
+  }
+};
