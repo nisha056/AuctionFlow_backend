@@ -3,8 +3,15 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const productRouter = require("./routes/productRouter");
 const userRouter = require("./routes/userRouter");
+const cors = require("cors");
 
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 // Connect to MongoDB Atlas
 const mongoURI =
   "mongodb+srv://Nishasharma:12345@cluster0.sjmwscv.mongodb.net/?retryWrites=true&w=majority";
