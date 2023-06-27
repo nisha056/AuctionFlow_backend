@@ -11,7 +11,6 @@ const {
 productRouter.route("/").get(viewproduct);
 productRouter.route("/").post(addproduct);
 productRouter.route("/like/:likeid").post(likeproduct);
-productRouter.route("/like/:likeid").post(likeproduct);
 productRouter.route("/:id").delete(delproduct);
-productRouter.route("/likes").get(likedproductlist);
+productRouter.route("/likes/:user_id").get(likedproductlist);
 module.exports = productRouter;

@@ -77,21 +77,11 @@ module.exports.likeproduct = async function likeproduct(req, res) {
 };
 module.exports.likedproductlist = async function likedproductlist(req, res) {
   try {
-    // const likedProduct = await productModel.find({
-    // like: { $exists: true, $ne: [] },
-    // });
-    // console.log(likedProduct);
-    // res.status(200).json({
-    //   success: true,
-    //   message: "Liked product accessed",
-    //   data: likedProduct,
-    //   isError: false,
-    //   devError: "",
-    //   error: "",
-    // });
-    const userId = req.params.userId;
+    //what items are being liked by specific users so here we will
+    //giev the id of the user
+    const userId = req.params.user_id;
     const likedProduct = await productModel.find({
-      like: { $exists: true, $ne: [] },
+      like: { $in: [userId] },
     });
     res.status(200).json({
       success: true,
