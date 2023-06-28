@@ -16,13 +16,21 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
+  enddate: {
     type: String,
     required: true,
   },
   like: {
     //It consists of the array of users who have liekd the product
     type: [String],
+  },
+  starting_amount: {
+    type: Number,
+    required: true,
+  },
+  latest_bid: {
+    type: Number,
+    required: true,
   },
   image: {
     type: String,

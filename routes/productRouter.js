@@ -6,6 +6,7 @@ const {
   addproduct,
   delproduct,
   likedproductlist,
+  bidForProduct,
 } = require("../controllers/productController");
 
 productRouter.route("/").get(viewproduct);
@@ -13,4 +14,5 @@ productRouter.route("/").post(addproduct);
 productRouter.route("/like/:likeid").post(likeproduct);
 productRouter.route("/:id").delete(delproduct);
 productRouter.route("/likes/:user_id").get(likedproductlist);
+productRouter.route("/:product_id/bid").put(bidForProduct);
 module.exports = productRouter;

@@ -12,21 +12,6 @@ module.exports.viewproduct = async function viewproduct(req, res) {
     });
   }
 };
-// module.exports.getbyid = async function getbyid(req, res) {
-//   try {
-//     getid = req.params.getid;
-//     const product = await productModel.findById(getid);
-//     res.json(product);
-//     res.status(200).json({
-//       message: "Got a product",
-//       product,
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       message: err.message,
-//     });
-//   }
-// };
 
 module.exports.likeproduct = async function likeproduct(req, res) {
   try {
@@ -78,7 +63,7 @@ module.exports.likeproduct = async function likeproduct(req, res) {
 module.exports.likedproductlist = async function likedproductlist(req, res) {
   try {
     //what items are being liked by specific users so here we will
-    //giev the id of the user
+    //give the id of the user
     const userId = req.params.user_id;
     const likedProduct = await productModel.find({
       like: { $in: [userId] },
@@ -130,6 +115,40 @@ module.exports.delproduct = async function delproduct(req, res) {
     res.status(200).json({
       message: "selected Product is deleted",
     });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+module.exports.bidForProduct = async function bidForProduct(req, res) {
+  try {
+    const product_id = req.params.product_id;
+    // console.log(product_id);
+    // console.log(req.body);
+    let value = req.body;
+
+    let product = await productModel.findByIdAndUpdate(product_id, {
+      username: value.username,
+      latest_bid: value.latest_bid,
+    });
+    if (product.latest_bid > product.starting_amount) {
+      console.log(product);
+      const updatedProduct = await product.save();
+
+      if (updatedProduct) {
+        res.status(200).json({
+          message: "New bid has been made",
+          updatedProduct,
+        });
+      }
+      console.log(updatedProduct);
+    } else {
+      res.status(500).json({
+        message: "Latest bid must be greater than starting bid",
+      });
+    }
   } catch (err) {
     res.status(500).json({
       message: err.message,

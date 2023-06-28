@@ -4,11 +4,12 @@ const mongoose = require("mongoose");
 const productRouter = require("./routes/productRouter");
 const userRouter = require("./routes/userRouter");
 const cors = require("cors");
+const bidRouter = require("./routes/bidRouter");
 
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -30,3 +31,4 @@ app.use(bodyParser.json());
 
 app.use("/products", productRouter);
 app.use("/users", userRouter);
+app.use("/bids", bidRouter);
