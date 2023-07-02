@@ -8,10 +8,11 @@ const {
   likedproductlist,
   bidForProduct,
   getproductById,
+  addExtraInfo,
 } = require("../controllers/productController");
 
 productRouter.route("/").get(viewproduct);
-productRouter.route("/:id").put(getproductById);
+productRouter.route("/details/:id").get(getproductById);
 productRouter.route("/").post(addproduct);
 productRouter.route("/like/:likeid").post(likeproduct);
 productRouter.route("/:id").delete(delproduct);

@@ -36,7 +36,8 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   extraInfo: {
-    type: Object,
+    type: String,
+    // type: mongoose.Schema.Types.Mixed,
   },
 });
 const productModel = mongoose.model("productModel", productSchema);

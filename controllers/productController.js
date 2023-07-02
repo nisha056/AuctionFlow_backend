@@ -14,22 +14,19 @@ module.exports.viewproduct = async function viewproduct(req, res) {
 };
 module.exports.getproductById = async function getproductById(req, res) {
   const id = req.params.id;
-  const extraInfo = req.body;
   try {
-    const product = await productModel.findByIdAndUpdate(id, {
-      $set: { extraInfo: extraInfo },
+    const product = await productModel.findById(id);
+    const updatedProduct = await product.save();
+    res.status(200).json({
+      message: "Product is found",
+      updatedProduct,
     });
-    if (product) {
-      res.json(product);
-      console.log(product);
-    }
   } catch (err) {
     res.status(500).json({
       message: err.message,
     });
   }
 };
-
 module.exports.likeproduct = async function likeproduct(req, res) {
   try {
     likeid = req.params.likeid;
