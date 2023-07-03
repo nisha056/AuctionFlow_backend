@@ -13,7 +13,6 @@ module.exports.viewuser = async function viewuser(req, res) {
     });
   }
 };
-
 module.exports.signup = async function signup(req, res) {
   try {
     let value = req.body;
@@ -62,7 +61,6 @@ module.exports.login = async function login(req, res) {
     res.status(400).json({ error });
   }
 };
-
 //used it as a middleware
 module.exports.verifytoken = async function (req, res, next) {
   try {

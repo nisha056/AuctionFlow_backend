@@ -10,7 +10,6 @@ const {
   getproductById,
   addExtraInfo,
 } = require("../controllers/productController");
-
 productRouter.route("/").get(viewproduct);
 productRouter.route("/details/:id").get(getproductById);
 productRouter.route("/").post(addproduct);
